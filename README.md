@@ -40,7 +40,7 @@ TreeIO from BioPerl is required to use PUG.
 
 <h4>Usage</h4>
 
-perl PUG.pl --paralogs file --trees file --outgroups list --species species_tree [options]
+perl PUG.pl --paralogs file --trees directory --outgroups list --species species_tree [options]
 
 <b>Options:</b>
          
