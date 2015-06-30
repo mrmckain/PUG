@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.19132.svg)](http://dx.doi.org/10.5281/zenodo.19132)
+
 PUG--Phylogenetic Placement of Polyploidy Using Genomes
 =============
 <b>Author</b>: Michael R. McKain<br>
