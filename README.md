@@ -34,10 +34,10 @@ Paralogs are queried in gene trees. Their placement, and the relative placement 
 
 <h4>Usage</h4>
 
-perl PUG.pl --paralogs file --trees file --outgroups list [options]
+perl PUG.pl --paralogs file --trees file --outgroups list --species species_tree [options]
 
 Options:
-	-paralogs	Tab delmited file of putative in-paralogs used to query gene trees for placement of WGD event. The file is expected to have paralogs in the first two columns, and a third that has the putative event name.  This allows the user to use paralog sets derived from multiple sources in the same analyses. It also also the user to have multiple events in the same analysis.
+	-paralogs	Tab delmited file of putative in-paralogs used to query gene trees for placement of WGD event. The file is expected to have paralogs in the first two columns, and a third that has the putative event name. This allows the user to use paralog sets derived from multiple sources in the same analyses. It also also the user to have multiple events in the same analysis.
     	
 	-trees		Directory of gene trees used to identify WGD placement. Trees should be in Newick format and have bootstrap values. The "bipartitions" file of RAxML works well.
     
