@@ -11,7 +11,7 @@ my $paralogs;
 my $trees;
 my $outgroups;
 my $species_tree;
-my $prefix = "GAPId";
+my $prefix = "PUG";
 
 GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix) or pod2usage(2);
 pod2usage(1) if $help;
