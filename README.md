@@ -12,6 +12,10 @@ Despite the name, PUG works with genomic or transcriptomic data.
 
 Paralogs are queried in gene trees. Their placement, and the relative placement of taxa in the gene tree, are compared to the given species tree and if they are found to match a node of the species tree, the pair is counted towards supporting the polyploid event origin at that node. A single node may be represented in a gene tree by multiple paralog pairs, but that node is counted only once for the gene tree.
 
+<h4>Requirements</h4>
+
+TreeIO from BioPerl is required to use PUG.
+
 <h4>Output</h4>
 
 <b>Labeled_Species_Tree</b>:<br></br>
