@@ -36,17 +36,11 @@ Paralogs are queried in gene trees. Their placement, and the relative placement 
 
 perl PUG.pl --paralogs file --trees file --outgroups list --species species_tree [options]
 
-Options:<br></br>
+<b>Options:</b>
 	-paralogs	Tab delmited file of putative in-paralogs used to query gene trees for placement of WGD event. The file is expected to have paralogs in the first two columns, and a third that has the putative event name. This allows the user to use paralog sets derived from multiple sources in the same analyses. It also also the user to have multiple events in the same analysis.
-    	
-	-trees		Directory of gene trees used to identify WGD placement. Trees should be in Newick format and have bootstrap values. The "bipartitions" file of RAxML works well.
-    
-	-outgroups	Comma delimited list of outgroups for trees. At least one of these taxa must be in the tree for it to be considered.
-    
-	-species_tree	Newick format tree with species relationships of all taxa present in gene trees. The names of these taxa must be represented in the names of the genes in the gene trees and in the paralogs file. Make sure they are unique and do not overlap with any other portion of the gene names.
-    
-	-name		Identifier for this run. This is be a prefix to all output files.  [Default = "PUG"]
-    	
-	-help		Brief help message
-    
-	-man		Full documentation
+    	-trees		Directory of gene trees used to identify WGD placement. Trees should be in Newick format and have bootstrap values. The "bipartitions" file of RAxML works well.
+    	-outgroups	Comma delimited list of outgroups for trees. At least one of these taxa must be in the tree for it to be considered.
+    	-species_tree	Newick format tree with species relationships of all taxa present in gene trees. The names of these taxa must be represented in the names of the genes in the gene trees and in the paralogs file. Make sure they are unique and do not overlap with any other portion of the gene names.
+    	-name		Identifier for this run. This is be a prefix to all output files.  [Default = "PUG"]
+    	-help		Brief help message
+    	-man		Full documentation
