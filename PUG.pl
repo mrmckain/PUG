@@ -65,10 +65,23 @@ my %events;
 open my $DUPS, "<", $paralogs;
 while (<$DUPS>) {
     chomp;
+    unless(/.+/){
+	next;
+    }
     my @tarray  = split /\s+/;
-    $dups{$tarray[0]}{$tarray[1]} = $tarray[2];
-    $events{$tarray[2]}=1;
-    push(@{$dups2{$tarray[0]}}, $tarray[1]);
+    if(@tarray == 3){
+    	$dups{$tarray[0]}{$tarray[1]} = $tarray[2];
+    	$events{$tarray[2]}=1;
+    	push(@{$dups2{$tarray[0]}}, $tarray[1]);
+    }
+    elsif(@tarray == 2){
+	$dups{$tarray[0]}{$tarray[1]} = "event";
+        $events{"event"}=1;
+        push(@{$dups2{$tarray[0]}}, $tarray[1]);
+    }
+    else{
+	die "Paralog file not formated properly.\n";
+    }	
 }
 close $DUPS;
 
