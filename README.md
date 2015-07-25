@@ -23,7 +23,7 @@ TreeIO from BioPerl is required to use PUG.
 <b>Preparation of Input</b>:
 	Each tree leaf needs to have a unique identifier for the species/accession associated with it. For example, a sequence from the species Andropogon virginicus might be--Androvirg.c1_g1_i1--while another from Andropogon gerardii would be--Androgera.c1_g1_i1. 
 
-<b>Paralogs Files</b>:
+<b>Paralogs File</b>:
 	A tab-delimited file of putative paralogs dervied from Ks analyses or synteny analysis. For each pair, a third column can be given that gives the source or the putative WGD event the use is testing.  If this is not supplied, then a default of "unknown" is used in downstream analysis.
 
 <b>Trees Directory</b>:
