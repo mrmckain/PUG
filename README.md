@@ -36,7 +36,7 @@ TreeIO from BioPerl is required to use PUG.
 	A species tree where the leaves are named so that they can be found in the gene trees. Following the example in "Preparation of Input", the species tree leaves for Andropogon virginicus and Andropogon gerardi would be Androvirg and Androgera, respectively.
 
 <b>Name</b>:
-	An option input that allows you to have a run name prepended to all the outfiles.
+	An optional input that allows you to have a run name prepended to all the outfiles.
 
 <h4>Output</h4>
 
