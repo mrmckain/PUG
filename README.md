@@ -20,42 +20,42 @@ TreeIO from BioPerl is required to use PUG.
 
 <h4>Input</h4>
 
-<b>Preparation of Input</b>:<br></br>
+<b>Preparation of Input</b>:
 	Each tree leaf needs to have a unique identifier for the species/accession associated with it. For example, a sequence from the species Andropogon virginicus might be--Androvirg.c1_g1_i1--while another from Andropogon gerardii would be--Androgera.c1_g1_i1. 
 
-<b>Paralogs Files</b>:<br></br>
+<b>Paralogs Files</b>:
 	A tab-delimited file of putative paralogs dervied from Ks analyses or synteny analysis. For each pair, a third column can be given that gives the source or the putative WGD event the use is testing.  If this is not supplied, then a default of "unknown" is used in downstream analysis.
 
-<b>Trees Directory</b>:<br></br>
+<b>Trees Directory</b>:
 	A directory of tree files with bootstrap values. 
 
-<b>Outgroups</b>:<br></br>
+<b>Outgroups</b>:
 	A comma-delmited list of outgroups where at least one must be in the gene tree for it to be used. These are needed to aid in accurate rooting of the phylogeny for the PUG search.
 
-<b>Species Tree</b>:<br></br>
+<b>Species Tree</b>:
 	A species tree where the leaves are named so that they can be found in the gene trees. Following the example in "Preparation of Input", the species tree leaves for Andropogon virginicus and Andropogon gerardi would be Androvirg and Androgera, respectively.
 
-<b>Name</b>:<br></br>
+<b>Name</b>:
 	An option input that allows you to have a run name prepended to all the outfiles.
 
 <h4>Output</h4>
 
-<b>Labeled_Species_Tree</b>:<br></br>
+<b>Labeled_Species_Tree</b>:
         Newick formatted file containing user submitted species tree with internal nodes labeled to match those of the summary file.
 
-<b>Labeled_Species_Tree.eps</b>:<br></br>
+<b>Labeled_Species_Tree.eps</b>:
 	Postscript file containing user submitted species tree with internal nodes labeled to match those of the summary file.
 
-<b>Gene_Tree_Results.txt</b>:<br></br>
+<b>Gene_Tree_Results.txt</b>:
 	Summary of paralog pairs and their relative placment in gene tree. Will finish this description to define each column in file.
 
-<b>Gene_Trees_Pairs_Bad_Results.txt</b>:<br></br>
+<b>Gene_Trees_Pairs_Bad_Results.txt</b>:
 	Summary of paralog pairs that did not fit any placement based on the species tree.
 
-<b>Paralog_Pairs_Per_Tree.txt</b>:<br></br>
+<b>Paralog_Pairs_Per_Tree.txt</b>:
 	Gene tree files names, the paralog pairs identified in the gene tree, and the bootstrap value of the LCA of the paralogs.
 
-<b>Summary_Results.txt</b>:<br></br>
+<b>Summary_Results.txt</b>:
 	Summary of all positive results per putative polyploid event, per labeled species tree node, and at each possible bootstrap value.  Further filtering of these results can 	  easily be done by the user.
 
 <h4>Usage</h4>
