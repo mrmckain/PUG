@@ -120,6 +120,7 @@ open my $OUT2, ">", "$prefix\_Paralog_Pairs_Per_Tree.txt";
 open my $OUT, ">", "$prefix\_Gene\_Tree\_Results.txt";
 open my $BADOUT, ">", "$prefix\_Gene_Trees_Pairs_Bad_Results.txt";
 open my $PAIRNODEOUT, ">", "$prefix\_Paralog_Pairs_Nodes_Bootstraps.txt";
+print $PAIRNODEOUT "Node\tBootstrap\tParalog1\tParalog2\n";
 
 ###Create outgroups data set.###
 my @outs = split(/,/,$outgroups);
