@@ -19,7 +19,7 @@ pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 
 =head1 NAME
-GAPId -- Genome Assisted Polyploidy Identification
+PUG -- Phylogentic Placement of Polyploidy Using Genomes
 =head1 SYNOPSIS
 perl gapid.pl -paralogs file -trees file -outgroups list [options] 
 =head1 OPTIONS
@@ -27,7 +27,7 @@ perl gapid.pl -paralogs file -trees file -outgroups list [options]
     -trees             Directory of gene trees used to identify WGD placement. Trees should be in Newick format and have bootstrap values. 
     -outgroups         Comma delimited list of outgroups for trees. At least one of these taxa must be in the tree for it to be considered.
     -species_tree      Newick format tree with species relationships of all taxa present in gene trees.
-    -name              Identifier for this run.  [Default = "GAPId"]
+    -name              Identifier for this run.  [Default = "PUG"]
     -help              Brief help message
     -man               Full documentation
 =cut
@@ -119,6 +119,7 @@ my $tree;
 open my $OUT2, ">", "$prefix\_Paralog_Pairs_Per_Tree.txt";
 open my $OUT, ">", "$prefix\_Gene\_Tree\_Results.txt";
 open my $BADOUT, ">", "$prefix\_Gene_Trees_Pairs_Bad_Results.txt";
+open my $PAIRNODEOUT, ">", "$prefix\_Paralog_Pairs_Nodes_Bootstraps.txt";
 
 ###Create outgroups data set.###
 my @outs = split(/,/,$outgroups);
@@ -313,6 +314,7 @@ for my $file (@file){
                 }
                 else{
                     $hypotheses{$dupeves}{$result}{$bs}++;
+                    print $PAIRNODEOUT "$result\t$bs\t$pair_tax1\t$pair_tax2\n";
                     print $OUT "$file\t$dupeves\t$bs\t$lca_used\t$pair_tax1\t$tax1_bs\t$tax1_spec\t$pair_tax2\t$tax2_bs\t$tax2_spec\t$outside_taxa\t$above_taxa\n";
                 }
             }
