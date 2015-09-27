@@ -12,8 +12,9 @@ my $trees;
 my $outgroups;
 my $species_tree;
 my $prefix = "PUG";
+my $all_genes;
 
-GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -28,6 +29,7 @@ perl gapid.pl -paralogs file -trees file -outgroups list [options]
     -outgroups         Comma delimited list of outgroups for trees. At least one of these taxa must be in the tree for it to be considered.
     -species_tree      Newick format tree with species relationships of all taxa present in gene trees.
     -name              Identifier for this run.  [Default = "PUG"]
+    -all_pairs         Flag that allows for counting of all paralog pairs, not just unique LCAs.	
     -help              Brief help message
     -man               Full documentation
 =cut
@@ -120,7 +122,7 @@ open my $OUT2, ">", "$prefix\_Paralog_Pairs_Per_Tree.txt";
 open my $OUT, ">", "$prefix\_Gene\_Tree\_Results.txt";
 open my $BADOUT, ">", "$prefix\_Gene_Trees_Pairs_Bad_Results.txt";
 open my $PAIRNODEOUT, ">", "$prefix\_Paralog_Pairs_Nodes_Bootstraps.txt";
-print $PAIRNODEOUT "Node\tBootstrap\tParalog1\tParalog2\n";
+print $PAIRNODEOUT "Orthogroup\tNode\tBootstrap\tParalog1\tParalog2\n";
 
 ###Create outgroups data set.###
 my @outs = split(/,/,$outgroups);
@@ -128,6 +130,15 @@ my @outs = split(/,/,$outgroups);
 ###Go through gene family trees to identify paralogs.###
 my @file = <$trees/*>;
 for my $file (@file){
+    my $short_file;
+    if($trees =~ /\//){
+        $file =~ /$trees\/(.+)/;
+        $short_file = $1;
+    }
+    else{
+        $file =~ /$trees(.+)/;
+        $short_file = $1;
+    }
     my $treeio = new Bio::TreeIO(-format => "newick", -file => "$file", -internal_node_id => 'bootstrap');
         while( $tree = $treeio->next_tree ) {
             my %pairs;
@@ -237,11 +248,11 @@ for my $file (@file){
                     push(@sisters, $child);
                     $children_concat .= $child;
                 }
-
+		unless($all_genes){
 				if (exists $lcas{$children_concat}){
                     $lca_used = "1";
                     next;
-                }
+                }}
 
 			    my $file_tree = substr($file, index($file, ".")+1);
 				$file_tree=substr($file_tree, 0, index($file_tree, "_"));
@@ -315,7 +326,7 @@ for my $file (@file){
                 }
                 else{
                     $hypotheses{$dupeves}{$result}{$bs}++;
-                    print $PAIRNODEOUT "$result\t$bs\t$pair_tax1\t$pair_tax2\n";
+                    print $PAIRNODEOUT "$file\t$result\t$bs\t$pair_tax1\t$pair_tax2\n";
                     print $OUT "$file\t$dupeves\t$bs\t$lca_used\t$pair_tax1\t$tax1_bs\t$tax1_spec\t$pair_tax2\t$tax2_bs\t$tax2_spec\t$outside_taxa\t$above_taxa\n";
                 }
             }
