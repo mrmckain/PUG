@@ -196,6 +196,28 @@ for my $file (@file){
 	    if($outexists == 0){
 	    	next;
 	    }
+        my $reroot_node;
+        OUT: for (my $k = 0; $k <= scalar @outs; $k++){
+        if($reroot_node){
+            next OUT;
+        }
+        else{
+            for my $taxa (@taxa){
+                $taxon = $taxa->id;
+                if($taxon =~ /$outs[$k]/){
+                    if($reroot_node){
+                        next OUT;
+                    }
+                    else{
+            
+                        $reroot_node = $taxa;
+                    }
+                }
+            }
+        }
+        }
+
+        $tree->reroot($reroot_node);    
             for my $taxa (keys %taxa){
 	#	for my $taxdup (keys %dups){
                 if (exists $dups{$taxa}){
@@ -230,6 +252,9 @@ for my $file (@file){
             for my $dupeves (sort keys %pairs){
                 my @sisters;
                 my $lca = $tree->get_lca(-nodes => \@{$pairs{$dupeves}});
+                unless($lca){
+                    next;
+                }
                 my ($tax1_spec, $tax2_spec, $tax1_bs, $tax2_bs);
                 my %tax_spec;
                 my $counter=1;
@@ -273,7 +298,10 @@ for my $file (@file){
                     }
                 }
                 my $tree_size = scalar keys %taxa;
-                my $bs = $lca->bootstrap;
+                my $bs;
+                if($lca){
+                    $bs = $lca->bootstrap;
+                }
                 my $above_taxa;
                 my $outside_taxa;
                 my $lca_used=0;
@@ -311,9 +339,9 @@ for my $file (@file){
 				}
 				print $OUT2 "$dups{$pair_tax1}{$pair_tax2}\t";
 				$pair_tax1 =~ s/XXX/:/g;
-				$pair_tax1 = substr($pair_tax1, 0,-1);
+				#$pair_tax1 = substr($pair_tax1, 0,-1);
 				$pair_tax2 =~ s/XXX/:/g;
-				$pair_tax2 = substr($pair_tax2, 0,-1);
+				#$pair_tax2 = substr($pair_tax2, 0,-1);
 				print $OUT2 "$pair_tax1\t$pair_tax2\n";
 	
                                 	
