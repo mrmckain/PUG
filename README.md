@@ -5,6 +5,7 @@ PUG--Phylogenetic Placement of Polyploidy Using Genomes
 <b>Author</b>: Michael R. McKain<br>
 </br>
 Version 2.0, June 30, 2015
+Version 2.1, February 1, 2016
 <br></br>
 <b>Contact</b>: https://github.com/mrmckain
 <h3>Description</h3>
@@ -73,7 +74,7 @@ perl PUG.pl --paralogs file --trees directory --outgroups list --species species
 	-species_tree     	Newick format tree with species relationships of all taxa present in gene trees. The names of these taxa must be represented in the names of the genes in the gene trees and in the paralogs file. Make sure they are unique and do not overlap with any other portion of the gene names.
 	-name    			Identifier for this run. This is be a prefix to all output files.  [Default = "PUG"]
 	-all_pairs			Flag that allows for counting of all paralog pairs, not just unique LCAs.
-	-estimate_paralogs		Estimates all possible unique gene pairs from gene trees to test with PUG algorithm.
+	-estimate_paralogs	Estimates all possible unique gene pairs from gene trees to test with PUG algorithm.
 	-help    			Brief help message
 	-man    			Full documentation
 
