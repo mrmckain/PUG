@@ -4,7 +4,8 @@ PUG--Phylogenetic Placement of Polyploidy Using Genomes
 =============
 <b>Author</b>: Michael R. McKain<br>
 </br>
-Version 2.0, June 30, 2015
+Version 2.0, June 30, 2015<br>
+</br>
 Version 2.1, February 1, 2016
 <br></br>
 <b>Contact</b>: https://github.com/mrmckain
