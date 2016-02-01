@@ -58,17 +58,22 @@ TreeIO from BioPerl is required to use PUG.
 <b>Summary_Results.txt</b>:
 	Summary of all positive results per putative polyploid event, per labeled species tree node, and at each possible bootstrap value.  Further filtering of these results can 	  easily be done by the user.
 
+<b>Estimated_Putative_Paralogs.txt</b>:
+	If the "estimate_paralogs" option is selected, all possible unique gene pairs from gene trees are identified and printed to this file.  Format is that of the typical input paralog file for PUG.
+
 <h4>Usage</h4>
 
 perl PUG.pl --paralogs file --trees directory --outgroups list --species species_tree [options]
 
 <b>Options:</b>
          
-	-paralogs    		Tab delmited file of putative in-paralogs used to query gene trees for placement of WGD event. The file is expected to have paralogs in the first two columns, and a third that has the putative event name. This allows the user to use paralog sets derived from multiple sources in the same analyses. It also also the user to have multiple events in the same analysis.
+	-paralogs    		Note: If "estimate_paralogs" option is selected, this input file is not needed. Tab delmited file of putative in-paralogs used to query gene trees for placement of WGD event. The file is expected to have paralogs in the first two columns, and a third that has the putative event name. This allows the user to use paralog sets derived from multiple sources in the same analyses. It also also the user to have multiple events in the same analysis.
 	-trees    			Directory of gene trees used to identify WGD placement. Trees should be in Newick format and have bootstrap values. The "bipartitions" file of RAxML works well.
 	-outgroups     		Comma delimited list of outgroups for trees. At least one of these taxa must be in the tree for it to be considered.
 	-species_tree     	Newick format tree with species relationships of all taxa present in gene trees. The names of these taxa must be represented in the names of the genes in the gene trees and in the paralogs file. Make sure they are unique and do not overlap with any other portion of the gene names.
 	-name    			Identifier for this run. This is be a prefix to all output files.  [Default = "PUG"]
+	-all_pairs			Flag that allows for counting of all paralog pairs, not just unique LCAs.
+	-estimate_paralogs		Estimates all possible unique gene pairs from gene trees to test with PUG algorithm.
 	-help    			Brief help message
 	-man    			Full documentation
 

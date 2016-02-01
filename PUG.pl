@@ -13,8 +13,9 @@ my $outgroups;
 my $species_tree;
 my $prefix = "PUG";
 my $all_genes;
+my $estimate_paralogs;
 
-GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes, 'estimate_paralogs' => \$estimate_paralogs) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -29,7 +30,8 @@ perl gapid.pl -paralogs file -trees file -outgroups list [options]
     -outgroups         Comma delimited list of outgroups for trees. At least one of these taxa must be in the tree for it to be considered.
     -species_tree      Newick format tree with species relationships of all taxa present in gene trees.
     -name              Identifier for this run.  [Default = "PUG"]
-    -all_pairs         Flag that allows for counting of all paralog pairs, not just unique LCAs.	
+    -all_pairs         Flag that allows for counting of all paralog pairs, not just unique LCAs.
+    -estimate_paralogs  Estimates all possible unique gene pairs from gene trees to test with PUG algorithm.	
     -help              Brief help message
     -man               Full documentation
 =cut
@@ -61,37 +63,12 @@ my %seqpairs;
 my %seqpairs2;
 my %lcas;
 my %events;
-
-
-###Load putative in-paralogs into hash for searching.###
-open my $DUPS, "<", $paralogs;
-while (<$DUPS>) {
-    chomp;
-    unless(/.+/){
-	next;
-    }
-    my @tarray  = split /\s+/;
-    if(@tarray == 3){
-    	$dups{$tarray[0]}{$tarray[1]} = $tarray[2];
-    	$events{$tarray[2]}=1;
-    	push(@{$dups2{$tarray[0]}}, $tarray[1]);
-    }
-    elsif(@tarray == 2){
-	$dups{$tarray[0]}{$tarray[1]} = "event";
-        $events{"event"}=1;
-        push(@{$dups2{$tarray[0]}}, $tarray[1]);
-    }
-    else{
-	die "Paralog file not formated properly.\n";
-    }	
-}
-close $DUPS;
-
 my %hypotheses;
 my %species_taxa;
 my %species_index;
 my %node_index;
 my $node_count=0;
+
 my $treeio = new Bio::TreeIO(-format => "newick", -file => "$labeled_species_tree");
 while( $tree = $treeio->next_tree ) {
         for my $node ( $tree->get_nodes){
@@ -115,7 +92,66 @@ while( $tree = $treeio->next_tree ) {
         $obj1->print(-file => "$prefix\_Labeled_Species_Tree.eps");
 }
 
+###Estimate all possible pairs if option chosen.###
+my @file = <$trees/*>;
+my %putative_paralogs;
 
+if($estimate_paralogs){
+    open my $out_estparalogs, ">", "$prefix\_Estimated_Putative_Paralogs.txt";
+    $paralogs = "$prefix\_Estimated_Putative_Paralogs.txt";
+    
+    for my $treefile (@file){
+        my $treeio = new Bio::TreeIO(-format => "newick", -file => "$treefile", -internal_node_id => 'bootstrap');
+        while( $tree = $treeio->next_tree ) {
+            my %temp_paralogs;
+            my @taxa = $tree->get_leaf_nodes;
+            foreach my $taxa (@taxa){
+                $taxon = $taxa->id;
+                for my $spec_tax (keys %species_taxa){
+                        if($taxon =~ /$spec_tax/){
+                            $temp_paralogs{$spec_tax}{$taxon}=1;
+                        }
+                }
+            }
+
+            for my $ospecies (keys %temp_paralogs){
+                if(scalar keys %{$temp_paralogs{$ospecies}} >= 2){
+                        my @transcripts = keys $temp_paralogs{$ospecies};
+                        for (my $i=0; $i < scalar @transcripts-1; $i++){
+                                for (my $k = $i+1; $k <= scalar @transcripts-1; $k++){
+                                        print $out_estparalogs "$transcripts[$i]\t$transcripts[$k]\tunknown\n";
+                                }
+                        }
+                }
+            }
+        }
+    }
+
+}
+
+###Load putative in-paralogs into hash for searching.###
+open my $DUPS, "<", $paralogs or die "Could not open file '$paralogs' $!";;
+while (<$DUPS>) {
+    chomp;
+    unless(/.+/){
+    next;
+    }
+    my @tarray  = split /\s+/;
+    if(@tarray == 3){
+        $dups{$tarray[0]}{$tarray[1]} = $tarray[2];
+        $events{$tarray[2]}=1;
+        push(@{$dups2{$tarray[0]}}, $tarray[1]);
+    }
+    elsif(@tarray == 2){
+    $dups{$tarray[0]}{$tarray[1]} = "event";
+        $events{"event"}=1;
+        push(@{$dups2{$tarray[0]}}, $tarray[1]);
+    }
+    else{
+    die "Paralog file not formated properly.\n";
+    }   
+}
+close $DUPS;
 
 my $tree;
 open my $OUT2, ">", "$prefix\_Paralog_Pairs_Per_Tree.txt";
@@ -128,7 +164,7 @@ print $PAIRNODEOUT "Orthogroup\tNode\tBootstrap\tParalog1\tParalog2\n";
 my @outs = split(/,/,$outgroups);
 
 ###Go through gene family trees to identify paralogs.###
-my @file = <$trees/*>;
+
 for my $file (@file){
     my $short_file;
     if($trees =~ /\//){
