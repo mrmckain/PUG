@@ -385,7 +385,15 @@ for my $file (@file){
 			}
 		}
                 my $result = &hypothesis_test($outside_taxa,$above_taxa,$dupeves);
+                unless($tax1_bs){
+                    $tax1_bs = "NA"
+                }
+                unless($tax1_bs){
+                    $tax2_bs = "NA"
+                }
+
                 if($result eq "0"){
+
                     print $BADOUT "$file\t$dupeves\t$bs\t$lca_used\t$pair_tax1\t$tax1_bs\t$tax1_spec\t$pair_tax2\t$tax2_bs\t$tax2_spec\t$outside_taxa\t$above_taxa\n";
                 }
                 else{
