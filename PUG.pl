@@ -96,7 +96,7 @@ while( $tree = $treeio->next_tree ) {
 my @file = <$trees/*>;
 my %putative_paralogs;
 
-if($estimate_paralogs){
+if($estimate_paralogs || !$paralogs){
     open my $out_estparalogs, ">", "$prefix\_Estimated_Putative_Paralogs.txt";
     $paralogs = "$prefix\_Estimated_Putative_Paralogs.txt";
     
@@ -438,6 +438,38 @@ for my $hyp_result (sort {$a cmp $b} keys %{$summary{$tevent}}){
     print $SUMMARY "\n";
 }
 	print $SUMMARY "\n";
+}
+
+ my %counts;
+open my $file, "<", "$prefix\_Paralog_Pairs_Nodes_Bootstraps.txt";
+while(<$file>){
+        chomp;
+
+        if(/Orthogroup/){
+                next;
+        }
+        else{
+                my @tarray=split /\s+/;
+                if($tarray[2] >= 80){
+                        $counts{$tarray[1]}{"BS80"}++;
+                        $counts{$tarray[1]}{"BS50"}++;
+                }
+                elsif($tarray[2] >= 50){
+                        $counts{$tarray[1]}{"BS50"}++;
+                }
+        }
+}
+
+open my $out, ">", $prefix . "_SUMMARIZED_5080.txt";
+
+for my $node (sort {$a cmp $b} keys %counts){
+        if(!exists $counts{$node}{BS80}){
+                $counts{$node}{BS80}=0;
+        }
+        if(!exists $counts{$node}{BS50}){
+                $counts{$node}{BS50}=0;
+        }
+        print $out "$node\t$counts{$node}{BS80}\t$counts{$node}{BS50}\n";
 }
 ###Build hypotheses to test from species tree.###
 sub hypothesis_test {
