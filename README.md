@@ -90,6 +90,10 @@ perl PUG.pl --paralogs file --trees directory --outgroups list --species species
 
 A script for making publication quality figures of a PUG analysis is now provided. These figures are similar to those found in <a href="http://gbe.oxfordjournals.org/content/8/4/1150.full?sid=9825eb8d-7200-4945-8671-a3224f4e4f29">McKain et. al. 2016</a> and an example is provided below.
 
+<h4>Requirements</h4>
+
+The APE package is required to use PUG Figure Maker.
+
 <h4>Usage</h4>
 
 Rscript PUG_Figure_Maker.R Labeled_Species_Tree.tre SUMMARIZED_5080.txt New_File_Name.pdf
