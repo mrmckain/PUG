@@ -386,10 +386,10 @@ for my $file (@file){
 		}
                 my $result = &hypothesis_test($outside_taxa,$above_taxa,$dupeves);
                 unless($tax1_bs){
-                    $tax1_bs = "NA"
+                    $tax1_bs = "NA";
                 }
                 unless($tax1_bs){
-                    $tax2_bs = "NA"
+                    $tax2_bs = "NA";
                 }
 
                 if($result eq "0"){
