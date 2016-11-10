@@ -42,6 +42,9 @@ my $node_id_species = 0;
 my $labeled_species_tree;
 while(<$species_temp_tree>){
 	chomp;
+    if(/:/){
+        s/:.*?(\)|\,)/$1/g;
+    }
 	while(/\)(\)|\,|\s)/){
 		$node_id_species++;
 		s/\)(\)|\,|\s)/\)N$node_id_species$1/;
