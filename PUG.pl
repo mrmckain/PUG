@@ -14,8 +14,9 @@ my $species_tree;
 my $prefix = "PUG";
 my $all_genes;
 my $estimate_paralogs;
+my $tree_type="ML";
 
-GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes, 'estimate_paralogs' => \$estimate_paralogs) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes, 'estimate_paralogs' => \$estimate_paralogs, 'tree_type=s' = \$tree_type ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -71,6 +72,7 @@ my %species_taxa;
 my %species_index;
 my %node_index;
 my $node_count=0;
+
 
 my $treeio = new Bio::TreeIO(-format => "newick", -file => "$labeled_species_tree");
 while( $tree = $treeio->next_tree ) {
@@ -277,6 +279,9 @@ for my $file (@file){
                     }
                     else{
                         my $temp_bs = $old_anc->bootstrap;
+                        if($tree_type =~ /bayesian/i || $tree_type =~ /BI/i){
+                                $temp_bs = $temp_bs*100;
+                        }
                         for my $child ($old_anc->get_all_Descendents){
                             if($child->is_Leaf){
                                 my $spec_leaf = $child->id;
@@ -304,6 +309,9 @@ for my $file (@file){
                 my $bs;
                 if($lca){
                     $bs = $lca->bootstrap;
+                    if($tree_type =~ /bayesian/i || $tree_type =~ /BI/i){
+                                $bs = $bs*100;
+                        }
                 }
                 my $above_taxa;
                 my $outside_taxa;
@@ -391,7 +399,7 @@ for my $file (@file){
                 unless($tax1_bs){
                     $tax1_bs = "NA";
                 }
-                unless($tax1_bs){
+                unless($tax2_bs){
                     $tax2_bs = "NA";
                 }
 
