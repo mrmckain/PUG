@@ -29,7 +29,7 @@ TreeIO from BioPerl is required to use PUG.
 	A tab-delimited file of putative paralogs dervied from Ks analyses or synteny analysis. For each pair, a third column can be given that gives the source or the putative WGD event the use is testing.  If this is not supplied, then a default of "unknown" is used in downstream analysis. 
 
 <b>Trees Directory</b>:
-	A directory of tree files with bootstrap values. 
+	A directory of tree files with bootstrap values or posterior probabilities. Any support values can be used. If your support values are between 0 and 1, use the parameter "tree_type" with the option "Bayesian". If values are between 0 and 100 (integers), the default of "ML" will be sufficient.
 
 <b>Outgroups</b>:
 	A comma-delmited list of outgroups where at least one must be in the gene tree for it to be used. These are needed to aid in accurate rooting of the phylogeny for the PUG search.
