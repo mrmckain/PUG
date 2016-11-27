@@ -80,7 +80,7 @@ perl PUG.pl --paralogs file --trees directory --outgroups list --species species
 	-outgroups     		Comma delimited list of outgroups for trees. At least one of these taxa must be in the tree for it to be considered.
 	-species_tree     	Newick format tree with species relationships of all taxa present in gene trees. The names of these taxa must be represented in the names of the genes in the gene trees and in the paralogs file. Make sure they are unique and do not overlap with any other portion of the gene names.
 	-name    			Identifier for this run. This is be a prefix to all output files.  [Default = "PUG"]
-	-tree_type			Type of trees given to PUG. If posterior probabilites are present in trees, this shoudl be marked "Bayesian" or "BI". If boostrap trees (maximum likelihood or parsimony) were used, no change is needed.  [Default = "ML"]
+	-tree_type			Type of trees given to PUG. If posterior probabilites are present in trees, this should be marked "Bayesian" or "BI". If boostrap trees (maximum likelihood or parsimony) were used, no change is needed.  [Default = "ML"]
 	-all_pairs			Flag that allows for counting of all paralog pairs, not just unique LCAs.
 	-estimate_paralogs	Estimates all possible unique gene pairs from gene trees to test with PUG algorithm. This is now the default ifa paralog file is not provided.
 	-help    			Brief help message
