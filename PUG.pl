@@ -16,7 +16,7 @@ my $all_genes;
 my $estimate_paralogs;
 my $tree_type="ML";
 
-GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes, 'estimate_paralogs' => \$estimate_paralogs, 'tree_type=s' = \$tree_type ) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes, 'estimate_paralogs' => \$estimate_paralogs, 'tree_type=s' => \$tree_type ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
