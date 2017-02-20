@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
-#use strict;
+use strict;
+use warnings;
 use Bio::TreeIO;
 use Bio::Tree::Draw::Cladogram;
 use Getopt::Long;
@@ -75,7 +76,7 @@ my $node_count=0;
 
 
 my $treeio = new Bio::TreeIO(-format => "newick", -file => "$labeled_species_tree");
-while( $tree = $treeio->next_tree ) {
+while( my $tree = $treeio->next_tree ) {
         for my $node ( $tree->get_nodes){
                 if($node->is_Leaf){
                     $species_taxa{$node->id}=1;
@@ -107,11 +108,11 @@ if($estimate_paralogs || !$paralogs){
     
     for my $treefile (@file){
         my $treeio = new Bio::TreeIO(-format => "newick", -file => "$treefile", -internal_node_id => 'bootstrap');
-        while( $tree = $treeio->next_tree ) {
+        while( my $tree = $treeio->next_tree ) {
             my %temp_paralogs;
             my @taxa = $tree->get_leaf_nodes;
             foreach my $taxa (@taxa){
-                $taxon = $taxa->id;
+                my $taxon = $taxa->id;
                 for my $spec_tax (keys %species_taxa){
                         if($taxon =~ /$spec_tax/){
                             $temp_paralogs{$spec_tax}{$taxon}=1;
