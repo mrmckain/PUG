@@ -6,6 +6,7 @@ use Bio::Tree::Draw::Cladogram;
 use Getopt::Long;
 use Pod::Usage;
 
+my $debug = 0;
 my $man = 0;
 my $help = 0;
 my $paralogs;
@@ -17,7 +18,7 @@ my $all_genes;
 my $estimate_paralogs;
 my $tree_type="ML";
 
-GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes, 'estimate_paralogs' => \$estimate_paralogs, 'tree_type=s' => \$tree_type ) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes, 'estimate_paralogs' => \$estimate_paralogs, 'tree_type=s' => \$tree_type, 'debug' => $debug ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -36,6 +37,7 @@ perl gapid.pl -paralogs file -trees file -outgroups list [options]
     -estimate_paralogs  Estimates all possible unique gene pairs from gene trees to test with PUG algorithm.	
     -help              Brief help message
     -man               Full documentation
+    -debug             Turn on debugging messages
 =cut
 
 open my $new_species_tree, ">", $prefix . "_Labeled_Species_Tree.tre";
@@ -43,19 +45,24 @@ open my $species_temp_tree, "<", $species_tree;
 my $node_id_species = 0;
 my $labeled_species_tree;
 while(<$species_temp_tree>){
+    warn "Reading current species tree line: '$_'" if $debug;
 	chomp;
     if(/:/){
         s/:.*?(\)|\,)/$1/g;
+        warn "\tline changed to '$_'" if $debug;
     }
 	while(/\)(\)|\,|\s)/){
 		$node_id_species++;
 		s/\)(\)|\,|\s)/\)N$node_id_species$1/;
+                    warn "\tcurrent species tree line changed to '$_'" if $debug;
 	}
 	$node_id_species++;
 	s/\)\;/\)N$node_id_species;/;
+          warn "\tline possible changed (now: '$_')" if $debug;
 	print $new_species_tree "$_\n";
 	#$labeled_species_tree = $_;
 }
+warn "Finished reading species trees" if $debug;
 close $new_species_tree;
 close $species_temp_tree;
 
@@ -74,7 +81,7 @@ my %species_index;
 my %node_index;
 my $node_count=0;
 
-
+warn "Opening '$labeled_species_tree'" if $debug;
 my $treeio = new Bio::TreeIO(-format => "newick", -file => "$labeled_species_tree");
 while( my $tree = $treeio->next_tree ) {
         for my $node ( $tree->get_nodes){
@@ -96,13 +103,16 @@ while( my $tree = $treeio->next_tree ) {
                                            -tree    => $tree,
                                            -compact => 1);
         $obj1->print(-file => "$prefix\_Labeled_Species_Tree.eps");
+        warn "Just printed cladogram to '$prefix\_Labeled_Species_Tree.eps'" if $debug;
 }
+warn "Finished printing cladogram(s)" if $debug;
 
 ###Estimate all possible pairs if option chosen.###
 my @file = <$trees/*>;
 my %putative_paralogs;
 
 if($estimate_paralogs || !$paralogs){
+    warn "Opening  '$prefix\_Estimated_Putative_Paralogs.txt'" if $debug;
     open my $out_estparalogs, ">", "$prefix\_Estimated_Putative_Paralogs.txt";
     $paralogs = "$prefix\_Estimated_Putative_Paralogs.txt";
     
@@ -611,4 +621,5 @@ sub hypothesis_test {
 
     }
 } 
-warn "Finished!!!!!!!";
+
+warn "Program finished!" if $debug;
