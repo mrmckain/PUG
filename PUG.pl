@@ -132,7 +132,7 @@ if($estimate_paralogs || !$paralogs){
 
             for my $ospecies (keys %temp_paralogs){
                 if(scalar keys %{$temp_paralogs{$ospecies}} >= 2){
-                        my @transcripts = keys $temp_paralogs{$ospecies};
+                        my @transcripts = keys %{$temp_paralogs{$ospecies}};
                         for (my $i=0; $i < scalar @transcripts-1; $i++){
                                 for (my $k = $i+1; $k <= scalar @transcripts-1; $k++){
                                         print $out_estparalogs "$transcripts[$i]\t$transcripts[$k]\tunknown\n";
