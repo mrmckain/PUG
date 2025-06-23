@@ -15,10 +15,11 @@ my $outgroups;
 my $species_tree;
 my $prefix = "PUG";
 my $all_genes;
+my $tip_dupes;
 my $estimate_paralogs;
 my $tree_type="ML";
 
-GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes, 'estimate_paralogs' => \$estimate_paralogs, 'tree_type=s' => \$tree_type, 'debug' => $debug ) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, "paralogs=s" => \$paralogs, "trees=s" => \$trees, "outgroups=s" => \$outgroups, "species_tree=s" => \$species_tree, "name=s" => \$prefix, 'all_pairs' => \$all_genes, 'estimate_paralogs' => \$estimate_paralogs, 'tip_dupes' => \$tip_dupes, 'tree_type=s' => \$tree_type, 'debug' => $debug ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -34,7 +35,8 @@ perl gapid.pl -paralogs file -trees file -outgroups list [options]
     -species_tree      Newick format tree with species relationships of all taxa present in gene trees.
     -name              Identifier for this run.  [Default = "PUG"]
     -all_pairs         Flag that allows for counting of all paralog pairs, not just unique LCAs.
-    -estimate_paralogs  Estimates all possible unique gene pairs from gene trees to test with PUG algorithm.	
+    -estimate_paralogs Estimates all possible unique gene pairs from gene trees to test with PUG algorithm.	
+    -tip_dupes         Allows PUG to count duplicates that map to tips.  
     -help              Brief help message
     -man               Full documentation
     -debug             Turn on debugging messages
@@ -191,7 +193,8 @@ for my $file (@file){
         $file =~ /$trees(.+)/;
         $short_file = $1;
     }
-    my $treeio = new Bio::TreeIO(-format => "newick", -file => "$file", -internal_node_id => 'bootstrap');
+    print "Working on $file\n";
+	my $treeio = new Bio::TreeIO(-format => "newick", -file => "$file", -internal_node_id => 'bootstrap');
         while( $tree = $treeio->next_tree ) {
             my %pairs;
             my $what;
@@ -548,11 +551,26 @@ sub hypothesis_test {
 	#    }
         #}
         ###Identifies the node of the species tree with all of the taxa sharing the putative WGD.###
-        if(scalar @current_in_taxa < 2){
-		my $value = 0;
-		return $value;
-	}
-	my $lca = $sptree->get_lca(-nodes => \@current_in_taxa);
+        unless($tip_dupes){
+            if(scalar @current_in_taxa < 2){
+		      my $value = 0;
+		      return $value;
+            }
+        }
+
+
+#This is where I can integrate the use of the tip dupes. If the current_in_taxa value is < 2, then there needs to be a different approach since the node is known.
+#The code will fail if there is only a single species in the list and the code tries to find a LCA in the species tree for the 
+    my $lca;
+    if($tip_dupes && (scalar @current_in_taxa < 2)){
+
+        $lca = $current_in_taxa[0];
+
+    }
+    else{
+
+        $lca = $sptree->get_lca(-nodes => \@current_in_taxa);
+    }
         ###Get all taxa that should be above LCA.###
         my @good_taxa = $lca->get_all_Descendents;
         my %good_taxa;
