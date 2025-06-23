@@ -83,6 +83,7 @@ perl PUG.pl --paralogs file --trees directory --outgroups list --species species
 	-tree_type			Type of trees given to PUG. If posterior probabilites are present in trees, this should be marked "Bayesian" or "BI". If boostrap trees (maximum likelihood or parsimony) were used, no change is needed.  [Default = "ML"]
 	-all_pairs			Flag that allows for counting of all paralog pairs, not just unique LCAs.
 	-estimate_paralogs	Estimates all possible unique gene pairs from gene trees to test with PUG algorithm. This is now the default ifa paralog file is not provided.
+	-tip_dupes		Allows for duplicates to be counted on tip branches.
 	-help    			Brief help message
 	-man    			Full documentation
 
